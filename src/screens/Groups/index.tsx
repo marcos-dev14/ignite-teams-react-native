@@ -7,6 +7,7 @@ import { GroupCard } from "@components/GroupCard";
 
 import { Container } from './styles';
 import { ListEmpty } from "@components/ListEmpty";
+import { Button } from "@components/Button";
 
 export function Groups() {
   const [groups, setGroups] = useState<string[]>(["Turma da Rocket"]);
@@ -30,6 +31,10 @@ export function Groups() {
         ListEmptyComponent={() => (
           <ListEmpty message="Que tal cadastrar a primeira turma?" />
         )}
+      />
+      
+      <Button 
+        title="Criar nova turma"
       />
 
     </Container>
