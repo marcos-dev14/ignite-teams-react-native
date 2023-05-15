@@ -1,5 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+import { AppError } from "@utils/AppError";
+
 import { GROUP_COLLECTION } from "@storage/storageConfig";
 import { groupsGetAll } from "./groupsGetAll";
 
@@ -7,6 +9,13 @@ export async function groupCreate(newGroup: string) {
   try {
     // Pegando os dados já armazenados no storage
     const storedGroups = await groupsGetAll();
+
+    // Verificação se já existe um grupo com o mesmo nome cadastrado
+    const groupAlreadyExists = storedGroups.includes(newGroup);
+
+    if (groupAlreadyExists) {
+      throw new AppError("Já existe um grupo cadastrado com esse nome.");
+    }
 
     // Atualizando os dados adicionando um novo grupo caso tiver se não tiver adiciona normalmente
     // E depois convertendo o array de string em uma string. OBS: Podemos converter também um objeto...
