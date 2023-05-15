@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { FlatList, Alert} from "react-native";
+import { useState, useEffect, useRef } from "react";
+import { FlatList, TextInput, Alert } from "react-native";
 import { useRoute } from "@react-navigation/native";
 
 import { AppError } from "@utils/AppError";
@@ -31,6 +31,8 @@ export function Players() {
   const route = useRoute();
   const { group } = route.params as RouteParams;
 
+  const newPlayerNameInputRef = useRef<TextInput>(null);
+
   async function handleAddPlayer() {
     if(newPlayerName.trim().length === 0) {
       return Alert.alert("Novo jogador", "Informe o nome do jogador para ser adicionando.")
@@ -43,6 +45,10 @@ export function Players() {
 
     try {
       await playerAddByGroup(newPlayer, group);
+
+      newPlayerNameInputRef.current?.blur();
+
+      setNewPlayerName("");
       fetchPlayersByTeam();
 
     } catch (error) {
@@ -80,9 +86,13 @@ export function Players() {
 
       <Form>
         <Input 
+          inputRef={newPlayerNameInputRef}
           placeholder="Nome da pessoa"
           autoCorrect={false}
           onChangeText={setNewPlayerName}
+          value={newPlayerName}
+          onSubmitEditing={handleAddPlayer}
+          returnKeyType="done"
         />
 
         <ButtonIcon 
